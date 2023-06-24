@@ -1,5 +1,6 @@
 package dev.simonverhoeven.restdocsdemo.library;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -7,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.constraints.ConstraintDescriptions;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -15,11 +17,9 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -72,6 +72,27 @@ public class BookControllerTest {
                                 pathParameters(
                                         parameterWithName("isbn").description("The ISBN-13 of the book you want to retrieve")
                                 )
+                        )
+                );
+    }
+
+    @Test
+    public void addBook() throws Exception {
+        ConstraintDescriptions bookCreationConstraints = new ConstraintDescriptions(BookCreationDTO.class);
+
+        this.mockMvc.perform(post("/books").contentType(MediaType.APPLICATION_JSON).content(new ObjectMapper().writeValueAsString(new BookCreationDTO("978-1633437975", "Spring Security in Action, Second Edition", "Laurentiu Spilca"))))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andDo(
+                        document(
+                                "addBook",
+                                requestFields(
+                                        fieldWithPath("isbn").description("ISBN-13 of the book" + bookCreationConstraints.descriptionsForProperty("isbn")),
+                                        fieldWithPath("title").description("Title of the book" + bookCreationConstraints.descriptionsForProperty("title")),
+                                        fieldWithPath("author").description("Author(s) of the book" + bookCreationConstraints.descriptionsForProperty("author"))
+                                ),
+                                responseFields(bookDescriptor)
                         )
                 );
     }
