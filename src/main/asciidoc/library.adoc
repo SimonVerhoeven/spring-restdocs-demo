@@ -1,0 +1,17 @@
+= Library controller
+
+== Get book
+
+include::{snippets}/getBook/curl-request.adoc[]
+
+include::{snippets}/getBook/response-body.adoc[]
+
+include::{snippets}/getBook/response-fields.adoc[]
+
+== Get books
+
+include::{snippets}/getBooks/curl-request.adoc[]
+
+include::{snippets}/getBooks/response-body.adoc[]
+
+include::{snippets}/getBooks/response-fields.adoc[]
