@@ -1,9 +1,11 @@
 package dev.simonverhoeven.restdocsdemo.library;
 
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -28,7 +30,7 @@ public class BookController {
 
     @GetMapping("{isbn}")
     public Book getBook(@PathVariable String isbn) {
-        return books.stream().filter(book -> isbn.equals(book.isbn())).findFirst().orElse(null);
+        return books.stream().filter(book -> isbn.equals(book.isbn())).findFirst().orElseThrow(() -> new BookNotFoundException(isbn));
     }
 
     @PostMapping
@@ -37,4 +39,14 @@ public class BookController {
         books.add(book);
         return book;
     }
+
+    @ExceptionHandler(BookNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ProblemDetail handleBookNotFound(BookNotFoundException exception) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, exception.getMessage());
+        problemDetail.setTitle("Book not found");
+        problemDetail.setType(URI.create("https://somelibrary.com/books/not-found"));
+        return problemDetail;
+    }
+
 }

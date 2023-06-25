@@ -2,40 +2,34 @@
 
 == Add book
 
-=== Request
-
-include::{snippets}/addBook/curl-request.adoc[]
-
-include::{snippets}/addBook/request-body.adoc[]
-
-include::{snippets}/addBook/request-fields.adoc[]
-
-=== Response
-
-include::{snippets}/addBook/response-body.adoc[]
-
-include::{snippets}/addBook/response-fields.adoc[]
+// Includes all snippets for the addBook operation
+operation::addBook[]
 
 == Get book
 
 === Request
 
+//Include specific snippets
 include::{snippets}/getBook/curl-request.adoc[]
+include::{snippets}/getBook/http-request.adoc[]
+include::{snippets}/getBook/httpie-request.adoc[]
+include::{snippets}/getBook/path-parameters.adoc[]
 
 === Response
 
+include::{snippets}/getBook/http-response.adoc[]
 include::{snippets}/getBook/response-body.adoc[]
-
 include::{snippets}/getBook/response-fields.adoc[]
+
+== Get book - not found
+
+//Custom title
+:operation-request-body-title: Request body (unused)
+
+//Using the operation macro with the snippets attribute to select which sections to include
+operation::getBook_notFound[snippets='curl-request,http-request,httpie-request,path-parameters,request-body']
+operation::getBook_notFound[snippets='http-response,response-body,response-fields']
 
 == Get books
 
-=== Request
-
-include::{snippets}/getBooks/curl-request.adoc[]
-
-=== Response
-
-include::{snippets}/getBooks/response-body.adoc[]
-
-include::{snippets}/getBooks/response-fields.adoc[]
+operation::getBooks[]
