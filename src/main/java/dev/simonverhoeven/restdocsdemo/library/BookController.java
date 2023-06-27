@@ -3,7 +3,10 @@ package dev.simonverhoeven.restdocsdemo.library;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.net.URI;
 import java.util.List;
@@ -38,6 +41,13 @@ public class BookController {
         final var book = new Book(bookCreation.isbn(), bookCreation.title(), bookCreation.author());
         books.add(book);
         return book;
+    }
+
+    @PostMapping("/{isbn}/addCover")
+    @ResponseStatus(value = HttpStatus.OK)
+    public ResponseEntity<Void> handleFileUpload(@RequestHeader("secretHeader") String header, @PathVariable String isbn, @RequestParam("cover") MultipartFile files) {
+        // file handling logic
+        return ResponseEntity.ok().header("secretResponseHeader", "42").build();
     }
 
     @ExceptionHandler(BookNotFoundException.class)

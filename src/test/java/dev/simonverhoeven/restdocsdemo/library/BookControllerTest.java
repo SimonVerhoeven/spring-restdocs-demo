@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.constraints.ConstraintDescriptions;
@@ -15,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
@@ -53,7 +55,7 @@ public class BookControllerTest {
     }
 
     @Test
-    public void getBooks() throws Exception {
+    void getBooks() throws Exception {
         this.mockMvc.perform(get("/books"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -71,7 +73,7 @@ public class BookControllerTest {
     }
 
     @Test
-    public void getBook() throws Exception {
+    void getBook() throws Exception {
         this.mockMvc.perform(get("/books/{isbn}", "978-1491952696"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -88,7 +90,7 @@ public class BookControllerTest {
     }
 
     @Test
-    public void getBook_notFound() throws Exception {
+    void getBook_notFound() throws Exception {
         this.mockMvc.perform(get("/books/{isbn}", "978-1491952695").contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isNotFound())
@@ -105,7 +107,7 @@ public class BookControllerTest {
     }
 
     @Test
-    public void addBook() throws Exception {
+    void addBook() throws Exception {
         // Here we're reading the constraints we've defined on the BookCreationDTO so that we can include them in our documentation
         ConstraintDescriptions bookCreationConstraints = new ConstraintDescriptions(BookCreationDTO.class);
 
@@ -122,6 +124,33 @@ public class BookControllerTest {
                                         fieldWithPath("author").description("Author(s) of the book" + bookCreationConstraints.descriptionsForProperty("author"))
                                 ),
                                 responseFields(bookDescriptor)
+                        )
+                );
+    }
+
+    @Test
+    void addCover() throws Exception {
+        final var coverImage = new MockMultipartFile("cover", "cover.png", "image/png", "<<cover data>>".getBytes());
+        final var metadata = new MockMultipartFile("metadata", "", "application/json", "{ \"version\": \"1.0\"}".getBytes());
+
+        this.mockMvc.perform(
+                    multipart("/books/{isbn}/addCover", "978-1491952695").file(coverImage).file(metadata).contentType(MediaType.APPLICATION_JSON)
+                    .header("secretHeader", "What is the meaning of life?")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(
+                        document(
+                                "addCover",
+                                // documenting headers
+                                requestHeaders(headerWithName("secretHeader").description("A secret header")),
+                                // documenting request part fields
+                                requestPartFields("metadata", fieldWithPath("version").description("The version of the image")),
+                                pathParameters(
+                                        parameterWithName("isbn").description("The ISBN-13 of the book you want to upload the cover for")
+                                ),
+                                // documenting response headers
+                                responseHeaders(headerWithName("secretResponseHeader").description("A secret response header"))
                         )
                 );
     }

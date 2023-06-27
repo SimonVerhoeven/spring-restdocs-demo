@@ -1,9 +1,13 @@
 = Library controller
 
-== Add book
+== Add a book
 
 // Includes all snippets for the addBook operation
 operation::addBook[]
+
+== Add a book cover
+
+operation::addCover[]
 
 == Get book
 
