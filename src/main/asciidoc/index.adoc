@@ -3,3 +3,7 @@
 == link:Library.html[library]
 
 Contains the information for the Library section
+
+== link:Member.html[member]
+
+Contains the information for the Member section

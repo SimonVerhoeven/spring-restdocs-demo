@@ -1,0 +1,17 @@
+= Member controller
+
+== Get a member
+
+An ignored balance field, grouped contact information (e-mail and mobile number)
+
+operation::getMember[]
+
+== Get a member - subsection
+
+Documenting a subsection
+
+operation::getMember_subsection[]
+
+== Get a member - document fields of a subsection
+
+operation::getMember_subsectionFields[]

@@ -1,12 +1,13 @@
 package dev.simonverhoeven.restdocsdemo.library;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.net.URI;
 import java.util.List;
@@ -14,9 +15,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RestController
-@RequestMapping("/books")
+@RequestMapping("/book")
 public class BookController {
-    List<Book> books;
+    private final List<Book> books;
 
     public BookController() {
         books = Stream.of(
@@ -32,7 +33,11 @@ public class BookController {
     }
 
     @GetMapping("{isbn}")
-    public Book getBook(@PathVariable String isbn) {
+    public Book getBook(
+            @PathVariable String isbn,
+            HttpServletResponse httpServletResponse) {
+        final var cookie = new Cookie("checkedBook", isbn);
+        httpServletResponse.addCookie(cookie);
         return books.stream().filter(book -> isbn.equals(book.isbn())).findFirst().orElseThrow(() -> new BookNotFoundException(isbn));
     }
 
@@ -45,7 +50,11 @@ public class BookController {
 
     @PostMapping("/{isbn}/addCover")
     @ResponseStatus(value = HttpStatus.OK)
-    public ResponseEntity<Void> handleFileUpload(@RequestHeader("secretHeader") String header, @PathVariable String isbn, @RequestParam("cover") MultipartFile files) {
+    public ResponseEntity<Void> handleFileUpload(
+            @RequestHeader("secretHeader") String header,
+            @PathVariable String isbn,
+            @RequestParam("cover") MultipartFile files
+    ) {
         // file handling logic
         return ResponseEntity.ok().header("secretResponseHeader", "42").build();
     }
@@ -55,7 +64,7 @@ public class BookController {
     public ProblemDetail handleBookNotFound(BookNotFoundException exception) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, exception.getMessage());
         problemDetail.setTitle("Book not found");
-        problemDetail.setType(URI.create("https://somelibrary.com/books/not-found"));
+        problemDetail.setType(URI.create("https://somelibrary.com/book/not-found"));
         return problemDetail;
     }
 

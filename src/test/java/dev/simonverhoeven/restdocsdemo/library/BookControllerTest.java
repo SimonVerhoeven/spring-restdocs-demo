@@ -16,6 +16,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
+import static org.springframework.restdocs.cookies.CookieDocumentation.responseCookies;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
@@ -56,7 +58,7 @@ public class BookControllerTest {
 
     @Test
     void getBooks() throws Exception {
-        this.mockMvc.perform(get("/books"))
+        this.mockMvc.perform(get("/book"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -74,7 +76,7 @@ public class BookControllerTest {
 
     @Test
     void getBook() throws Exception {
-        this.mockMvc.perform(get("/books/{isbn}", "978-1491952696"))
+        this.mockMvc.perform(get("/book/{isbn}", "978-1491952696"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -82,6 +84,7 @@ public class BookControllerTest {
                         document(
                                 "getBook",
                                 responseFields(bookDescriptor),
+                                responseCookies(cookieWithName("checkedBook").description("The checked book ISBN as a cookie")),
                                 pathParameters(
                                         parameterWithName("isbn").description("The ISBN-13 of the book you want to retrieve")
                                 )
@@ -91,7 +94,7 @@ public class BookControllerTest {
 
     @Test
     void getBook_notFound() throws Exception {
-        this.mockMvc.perform(get("/books/{isbn}", "978-1491952695").contentType(MediaType.APPLICATION_JSON))
+        this.mockMvc.perform(get("/book/{isbn}", "978-1491952695").contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -111,7 +114,7 @@ public class BookControllerTest {
         // Here we're reading the constraints we've defined on the BookCreationDTO so that we can include them in our documentation
         ConstraintDescriptions bookCreationConstraints = new ConstraintDescriptions(BookCreationDTO.class);
 
-        this.mockMvc.perform(post("/books").contentType(MediaType.APPLICATION_JSON).content(new ObjectMapper().writeValueAsString(new BookCreationDTO("978-1633437975", "Spring Security in Action, Second Edition", "Laurentiu Spilca"))))
+        this.mockMvc.perform(post("/book").contentType(MediaType.APPLICATION_JSON).content(new ObjectMapper().writeValueAsString(new BookCreationDTO("978-1633437975", "Spring Security in Action, Second Edition", "Laurentiu Spilca"))))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -134,7 +137,7 @@ public class BookControllerTest {
         final var metadata = new MockMultipartFile("metadata", "", "application/json", "{ \"version\": \"1.0\"}".getBytes());
 
         this.mockMvc.perform(
-                    multipart("/books/{isbn}/addCover", "978-1491952695").file(coverImage).file(metadata).contentType(MediaType.APPLICATION_JSON)
+                    multipart("/book/{isbn}/addCover", "978-1491952695").file(coverImage).file(metadata).contentType(MediaType.APPLICATION_JSON)
                     .header("secretHeader", "What is the meaning of life?")
                 )
                 .andDo(print())
