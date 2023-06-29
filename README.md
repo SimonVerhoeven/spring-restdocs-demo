@@ -25,20 +25,24 @@ When you run `./mvnw package` the documentation will be generated, and can be op
 
 ### asciidoc
 
-These two asciidoc files will point to our generated documentation, in there you can find some examples on how you can set it up.
+These three asciidoc files will point to our generated documentation, in there you can find some examples on how you can set it up.
 
 [index.adoc](src/main/asciidoc/index.adoc)  
-[library.adoc](src/main/asciidoc/library.adoc)
-
+[library.adoc](src/main/asciidoc/library.adoc)  
+[member.adoc](src/main/asciidoc/member.adoc)
 
 ### Tests
 
 The tests responsible for generating our documentation can be found within [BookControllerTest](src/test/java/dev/simonverhoeven/restdocsdemo/library/BookControllerTest.java) alongside the description of what we're documenting.
 The tests themselves are basic mockmvc tests, to which we add a little bit of extra functionality so the documentation is generated.
 
+### Custom code snippets
+
+It is possible to customize the snippets. Given this setup was done using asciidoc, we need to put these in `src\test\resources\org\springframework\restdocs\templates\asciidoctor`
+
 ***
 
 Notes
 
-* The `ISBN` annotation does not have a localization by default, hence the need to create `src\test\resources\org\springframework\restdocs\constraints\ConstraintDescriptions.properties`
+* The `ISBN` annotation does not have a localization by (see for reference [this section](https://docs.spring.io/spring-restdocs/docs/current/reference/htmlsingle/#documenting-your-api-constraints-describing), hence the need to create `src\test\resources\org\springframework\restdocs\constraints\ConstraintDescriptions.properties`
 * keep in mind if you document the fields, you need to document them all or the build will fail
