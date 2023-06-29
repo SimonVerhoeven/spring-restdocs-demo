@@ -12,6 +12,8 @@ This project is a sample implementation of [Spring REST Docs](https://spring.io/
 
 When you run `./mvnw package` the documentation will be generated, and can be opened at `target/generated-docs/index.html`
 
+Since we're bundling the documentation (documented below), you can also check out the documentation [here](http://localhost:8080/docs/index.html) whilst running the application.
+
 ***
 
 ## Setup
