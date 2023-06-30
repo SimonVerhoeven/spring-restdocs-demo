@@ -33,9 +33,12 @@ These three asciidoc files will point to our generated documentation, in there y
 [library.adoc](src/main/asciidoc/library.adoc)  
 [member.adoc](src/main/asciidoc/member.adoc)
 
+Within the `library` adoc file you can also find examples on how you can further customize the layout.
+
 ### Tests
 
 The tests responsible for generating our documentation can be found within [BookControllerTest](src/test/java/dev/simonverhoeven/restdocsdemo/library/BookControllerTest.java) and [MemberControllerTest](src/test/java/dev/simonverhoeven/restdocsdemo/member/MemberControllerTest.java)  alongside the description of what we're documenting.
+
 The tests themselves are basic mockmvc tests, to which we add a little bit of extra functionality so the documentation is generated.
 
 In the setup of the `BookControllerTest` we're also enriching the default configuration a so our documentation is richer (for example the default url, the encoding, removing headers by default, pretty printing, ...).

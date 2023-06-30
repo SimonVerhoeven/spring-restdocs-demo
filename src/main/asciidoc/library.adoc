@@ -23,6 +23,11 @@ include::{snippets}/getBook/path-parameters.adoc[]
 
 include::{snippets}/getBook/http-response.adoc[]
 include::{snippets}/getBook/response-body.adoc[]
+// configuring a title
+.Custom title for a section
+// Asciidoctor allows us to format the table's columns.
+// In this case we're configuring it so that the third columns is thrice as wide as the first two combined.
+[cols="1,1,6"]
 include::{snippets}/getBook/response-fields.adoc[]
 
 == Get book - not found
