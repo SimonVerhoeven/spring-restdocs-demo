@@ -1,10 +1,27 @@
 # Spring rest docs
 
+* [About](#about)
+* [Requirements](#requirements)
+* [How to use](#how-to-use)
+* [Setup](#setup)
+  + [Pom](#pom)
+  + [asciidoc](#asciidoc)
+  + [Tests](#tests)
+  + [Custom code snippets](#custom-code-snippets)
+  
 ***
 
 ## About
 
 This project is a sample implementation of [Spring REST Docs](https://spring.io/projects/spring-restdocs) to showcase how we can use our test cases to generate documentation for us, and bundle it as part of our build. In this case, for a controller which allows us to fetch a list of books, fetch a book by ISBN-13 and add one. (the controller is very basic, and in memory since the focus is on the documentation aspect).
+
+***
+
+## Requirements
+
+* java 17
+* Spring framework 6
+* REST Assured 5.2 if you're using `spring-restdocs-restassured`
 
 ***
 
