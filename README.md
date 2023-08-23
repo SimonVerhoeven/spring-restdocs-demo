@@ -13,7 +13,7 @@
 
 ## About
 
-This project is a sample implementation of [Spring REST Docs](https://spring.io/projects/spring-restdocs) to showcase how we can use our test cases to generate documentation for us, and bundle it as part of our build. In this case, for a controller which allows us to fetch a list of books, fetch a book by ISBN-13 and add one. (the controller is very basic, and in memory since the focus is on the documentation aspect).
+This project is a sample implementation of [Spring REST Docs](https://spring.io/projects/spring-restdocs) to showcase how we can use our test cases to generate documentation for us and bundle it as part of our build. In this case, for a controller that allows us to fetch a list of books, fetch a book by ISBN-13 and add one. (the controller is very basic, and in memory since the focus is on the documentation aspect).
 
 ***
 
@@ -44,13 +44,13 @@ Since we're bundling the documentation (documented below), you can also check ou
 
 ### asciidoc
 
-These three asciidoc files will point to our generated documentation, in there you can find some examples on how you can set it up.
+These three asciidoc files will point to our generated documentation, in there you can find some examples of how you can set it up.
 
 [index.adoc](src/main/asciidoc/index.adoc)  
 [library.adoc](src/main/asciidoc/library.adoc)  
 [member.adoc](src/main/asciidoc/member.adoc)
 
-Within the `library` adoc file you can also find examples on how you can further customize the layout.
+Within the `library` adoc file you can also find examples of how you can further customize the layout.
 
 ### Tests
 
@@ -58,7 +58,7 @@ The tests responsible for generating our documentation can be found within [Book
 
 The tests themselves are basic mockmvc tests, to which we add a little bit of extra functionality so the documentation is generated.
 
-In the setup of the `BookControllerTest` we're also enriching the default configuration a so our documentation is richer (for example the default url, the encoding, removing headers by default, pretty printing, ...).
+In the setup of the `BookControllerTest` we're also enriching the default configuration so our documentation is richer (for example the default URL, the encoding, removing headers by default, pretty printing, ...).
 
 ### Custom code snippets
 
