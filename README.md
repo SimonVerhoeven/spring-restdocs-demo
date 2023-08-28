@@ -15,6 +15,8 @@
 
 This project is a sample implementation of [Spring REST Docs](https://spring.io/projects/spring-restdocs) to showcase how we can use our test cases to generate documentation for us and bundle it as part of our build. In this case, for a controller that allows us to fetch a list of books, fetch a book by ISBN-13 and add one. (the controller is very basic, and in memory since the focus is on the documentation aspect).
 
+Feel free to clone this repository, to more easily follow along.
+
 ***
 
 ## Requirements
@@ -68,5 +70,5 @@ It is possible to customize the snippets. Given this setup was done using asciid
 
 Notes
 
-* The `ISBN` annotation does not have a localization by (see for reference [this section](https://docs.spring.io/spring-restdocs/docs/current/reference/htmlsingle/#documenting-your-api-constraints-describing), hence the need to create `src\test\resources\org\springframework\restdocs\constraints\ConstraintDescriptions.properties`
+* The `ISBN` annotation does not have a localization by default (see for reference [this section](https://docs.spring.io/spring-restdocs/docs/current/reference/htmlsingle/#documenting-your-api-constraints-describing), hence the need to create `src\test\resources\org\springframework\restdocs\constraints\ConstraintDescriptions.properties`
 * keep in mind if you document the fields, you need to document them all or the build will fail
